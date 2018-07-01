@@ -96,10 +96,10 @@ describe("WorkingHoursProcessor", function () {
             it("Should return 3 consecutive days and 1 non-consecutive day in a human readable format", function () {
                 //Arrange
                 let sut = new WorkingHoursProcessor();
-                let data = [{"day": "mon", "from": "11:00", "to": "23:00"},
+                let data = [{"day": "THU", "from": "11:00", "to": "23:00"},
                             {"day": "Tue", "from": "11:00", "to": "23:00"},
                             {"day": "wed", "from": "11:00", "to": "23:00"},
-                            {"day": "THU", "from": "11:00", "to": "23:00"}
+                            {"day": "mon", "from": "11:00", "to": "23:00"}
                             ];
 
                 //Act

@@ -12,38 +12,62 @@ function WorkingHoursProcessor() {
                 return `${data[0].day.toUpperCase()}: ${data[0].from} - ${data[0].to}`;
             }
             else {
+                
                 let ArrayWithListOfReadableWorkingHours = [];
 
-                for (let x = 0; x < _days.length; x++) {
-                    let currentDay = data.find(a => a.day.toLowerCase() == _days[x].day);
-
-
-                    if (currentDay != null) {
-                        let dayId = _days[x].id;
-                        let objectWithReadableWorkingHours = { id: dayId, day: currentDay.day.toUpperCase(), hours: currentDay.from + ' - ' + currentDay.to };
-
-                        if (ArrayWithListOfReadableWorkingHours.length == 0) {
-                            ArrayWithListOfReadableWorkingHours.push(objectWithReadableWorkingHours);
-                        }
-                        else {
-                            let lastRecordIndex = ArrayWithListOfReadableWorkingHours.length - 1;
-                            let lastRecord = ArrayWithListOfReadableWorkingHours[lastRecordIndex]
-
-                            if ((dayId - 1) == lastRecord.id && lastRecord.hours == (currentDay.from + ' - ' + currentDay.to)) {
-
-                                ArrayWithListOfReadableWorkingHours[lastRecordIndex].id = dayId;
-                                ArrayWithListOfReadableWorkingHours[lastRecordIndex].day = lastRecord.day + " - " + currentDay.day.toUpperCase();
-                            }
-                            else {
-                                ArrayWithListOfReadableWorkingHours.push(objectWithReadableWorkingHours);
-                            }
-                        }
-                    }
-                }
+                HandleOrderOfDays(data, ArrayWithListOfReadableWorkingHours);
                 results = GetResultsAsString(ArrayWithListOfReadableWorkingHours);
             }
             return results;
         }
+    }
+
+    function HandleOrderOfDays(data, ArrayWithListOfReadableWorkingHours) {
+        for (let position = 0; position < _days.length; position++) {
+            let currentDay = GetCurrentDay(data, position);
+            if (currentDay != null)
+                AddCurrentDayToTheObject(position, currentDay, ArrayWithListOfReadableWorkingHours);
+        }
+    }
+
+    function AddCurrentDayToTheObject(position, currentDay, ArrayWithListOfReadableWorkingHours) {
+        {
+            let dayId = _days[position].id;
+            let objectWithReadableWorkingHours = { id: dayId, day: currentDay.day.toUpperCase(), hours: currentDay.from + ' - ' + currentDay.to };
+            if (ArrayWithListOfReadableWorkingHours.length == 0) {
+                AddCurrentDayFromObjectToArray(objectWithReadableWorkingHours, ArrayWithListOfReadableWorkingHours);
+            }
+            else {
+                let lastRecordIndex = ArrayWithListOfReadableWorkingHours.length - 1;
+                let lastRecordedDay = ArrayWithListOfReadableWorkingHours[lastRecordIndex];
+
+                if (CurrentDayFollowsLastRecordedDayWithSameWorkingHours(dayId, lastRecordedDay, currentDay)) {
+
+                    AppendCurrentDayToTheArray(ArrayWithListOfReadableWorkingHours, lastRecordIndex, dayId, lastRecordedDay, currentDay);
+                }
+                else {
+                    AddCurrentDayFromObjectToArray(objectWithReadableWorkingHours, ArrayWithListOfReadableWorkingHours);
+                }
+            }
+        }
+    }
+
+    function CurrentDayFollowsLastRecordedDayWithSameWorkingHours(dayId, lastRecordedDay, currentDay) {
+        return (dayId - 1) == lastRecordedDay.id && lastRecordedDay.hours == (currentDay.from + ' - ' + currentDay.to);
+    }
+
+    function AppendCurrentDayToTheArray(ArrayWithListOfReadableWorkingHours, lastRecordIndex, dayId, lastRecord, currentDay) {
+        ArrayWithListOfReadableWorkingHours[lastRecordIndex].id = dayId;
+        ArrayWithListOfReadableWorkingHours[lastRecordIndex].day = lastRecord.day + " - " + currentDay.day.toUpperCase();
+    }
+
+    function AddCurrentDayFromObjectToArray(objectWithReadableWorkingHours, ArrayWithListOfReadableWorkingHours) {
+        ArrayWithListOfReadableWorkingHours.push(objectWithReadableWorkingHours);
+    }
+
+    function GetCurrentDay(data, x) {
+        var currentDay = data.find(a => a.day.toLowerCase() == _days[x].day);
+        return currentDay;
     }
 
     function GetResultsAsString(ArrayWithListOfReadableWorkingHours) {
