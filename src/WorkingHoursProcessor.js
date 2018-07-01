@@ -11,22 +11,18 @@ function WorkingHoursProcessor() {
 
                 return `${data[0].day.toUpperCase()}: ${data[0].from} - ${data[0].to}`;
             }
-            else {
-                
+            else { 
                 let ArrayWithListOfReadableWorkingHours = [];
 
-                HandleOrderOfDays(data, ArrayWithListOfReadableWorkingHours);
+                for (let position = 0; position < _days.length; position++) {
+                    let currentDay = GetCurrentDay(data, position);
+
+                    if (currentDay != null)
+                        AddCurrentDayToTheObject(position, currentDay, ArrayWithListOfReadableWorkingHours);
+                }
                 results = GetResultsAsString(ArrayWithListOfReadableWorkingHours);
             }
             return results;
-        }
-    }
-
-    function HandleOrderOfDays(data, ArrayWithListOfReadableWorkingHours) {
-        for (let position = 0; position < _days.length; position++) {
-            let currentDay = GetCurrentDay(data, position);
-            if (currentDay != null)
-                AddCurrentDayToTheObject(position, currentDay, ArrayWithListOfReadableWorkingHours);
         }
     }
 
