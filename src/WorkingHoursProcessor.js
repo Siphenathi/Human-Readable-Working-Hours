@@ -15,7 +15,7 @@ function WorkingHoursProcessor() {
                 let ArrayWithListOfReadableWorkingHours = [];
 
                 for (let x = 0; x < _days.length; x++) {
-                    let currentDay = data.find(a => a.day == _days[x].day);
+                    let currentDay = data.find(a => a.day.toLowerCase() == _days[x].day);
 
 
                     if (currentDay != null) {
@@ -50,10 +50,27 @@ function WorkingHoursProcessor() {
         let result = '';
         for (let x = 0; x < ArrayWithListOfReadableWorkingHours.length; x++) {
 
-            result += `${ArrayWithListOfReadableWorkingHours[x].day}: ${ArrayWithListOfReadableWorkingHours[x].hours}\n`;
+            let daysAndHours = `${ArrayWithListOfReadableWorkingHours[x].day}: ${ArrayWithListOfReadableWorkingHours[x].hours}\n`;
+            result += ExtractMiddleDays(daysAndHours);
 
         }
         return result.trim();
+    }
+
+    function ExtractMiddleDays(data) {
+
+        let days = data.substring(0, data.indexOf(":"));
+
+        if (days.length > 9) {
+            let firstDay = days.substring(0, 3);
+            let lastDay = days.substring(days.length - 3);
+
+            days = firstDay + " - " + lastDay;
+            let hours = data.substring(data.indexOf(":"));
+            results = days + hours;
+            return results;
+        }
+        return data;
     }
 
     function Getdays() {
