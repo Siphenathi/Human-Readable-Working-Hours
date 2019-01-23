@@ -3,6 +3,7 @@ function WorkingHoursProcessor() {
     let _days = Getdays();
     return {
         GetFormatedReadableHours: function (data) {
+
             let results = '';
             if (data.length == 0) {
                 return data;
@@ -96,12 +97,13 @@ function WorkingHoursProcessor() {
     function Getdays() {
 
         let days = [{ 'id': 1, 'day': 'mon' },
-        { 'id': 2, 'day': 'tue' },
-        { 'id': 3, 'day': 'wed' },
-        { 'id': 4, 'day': 'thu' },
-        { 'id': 5, 'day': 'fri' },
-        { 'id': 6, 'day': 'sat' },
-        { 'id': 7, 'day': 'sun' }];
+                    { 'id': 2, 'day': 'tue' },
+                    { 'id': 3, 'day': 'wed' },
+                    { 'id': 4, 'day': 'thu' },
+                    { 'id': 5, 'day': 'fri' },
+                    { 'id': 6, 'day': 'sat' },
+                    { 'id': 7, 'day': 'sun' }
+                   ];
         return days;
     }
 }
